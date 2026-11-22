@@ -1,2 +1,4 @@
 include ':app'
+include ':picture-selector-legacy'
+project(':picture-selector-legacy').projectDir = file('vendor/PictureSelector-v2.1.0/picture_library')
 

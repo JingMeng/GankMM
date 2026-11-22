@@ -1,22 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'channel'
-
-channel {
-    //指定渠道文件
-    channelFile = file("channel.txt")
-    //多渠道包的输出目录，默认为new File(project.buildDir,"channel")
-    baseOutputDir = new File(project.buildDir, "channel")
-    //多渠道包的命名规则，默认为：${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}
-    apkNameFormat = '${appName}-${versionName}-${flavorName}-${buildType}'
-    //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上）
-    isFastMode = true
-}
 
 def config = rootProject.ext.android // 配置
 def librarys = rootProject.ext.dependencies // 依赖
 
 
 android {
+    namespace 'com.maning.gankmm'
+    buildFeatures { buildConfig true }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
     compileSdkVersion config.compileSdkVersion
     buildToolsVersion config.buildToolsVersion
 
@@ -28,14 +22,11 @@ android {
         versionName config.versionName
         resConfigs "zh"
 
-        renderscriptTargetApi 25
-        renderscriptSupportModeEnabled true
         vectorDrawables.useSupportLibrary = true
 
         // 设置MultiDex可用
         multiDexEnabled true
         flavorDimensions "versionCode"
-        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
     }
 
     signingConfigs {//签名信息
@@ -146,8 +137,9 @@ dependencies {
     implementation 'com.github.zhaokaiqiang.klog:library:1.6.0'
     /*注解*/
     implementation 'com.jakewharton:butterknife:7.0.1'
+    annotationProcessor 'com.jakewharton:butterknife:7.0.1'
     /*下拉刷新框架*/
-    implementation 'com.github.Aspsine:SwipeToLoadLayout:v1.0.4'
+    implementation 'com.github.Aspsine:SwipeToLoadLayout:1.0.4'
     /*点赞收藏按钮*/
     implementation 'com.ldoublem.thumbUplib:ThumbUplib:0.5'
     /*material风格的dialogs*/
@@ -180,7 +172,7 @@ dependencies {
     /* 滚轮选择器 */
     implementation 'com.contrarywind:Android-PickerView:3.2.5'
     /* 图片选择 */
-    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.0'
+    implementation project(':picture-selector-legacy')
     /* 状态栏 */
     implementation 'com.jaeger.statusbarutil:library:1.5.0'
     /* VasDolly渠道包渠道获取帮助类 */

@@ -1,50 +1,33 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply from: "config.gradle"
-
+apply from: 'config.gradle'
 buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        google()
-        maven { url 'https://jitpack.io' }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-        /*快速生成渠道包*/
-        classpath 'com.leon.channel:plugin:1.1.7'
-    }
+    repositories { google(); mavenCentral() }
+    dependencies { classpath 'com.android.tools.build:gradle:8.2.1' }
 }
-
 allprojects {
     repositories {
-        jcenter()
-        mavenCentral()
-        google()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.google.com' }
-    }
-
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-    }
-}
-
-subprojects {
-    project.configurations.all {
-        resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'com.android.support'
-                    && !details.requested.name.contains('multidex')
-                    && !details.requested.name.contains('constraint')
-            ) {
-                details.useVersion '28.0.0'//改这个版本号到你想要的版本
+        maven {
+            url rootProject.file('local-maven')
+            content {
+                includeGroup 'com.leon.channel'
+                includeGroup 'com.yqritc'
+                includeGroup 'jp.wasabeef'
+                includeGroup 'com.tencent'
+                includeGroup 'com.github.zhaokaiqiang.klog'
+                includeGroup 'com.github.Aspsine'
+                includeGroup 'com.ldoublem.thumbUplib'
+                includeGroup 'io.github.yavski'
+                includeGroup 'com.kelin.scrollablepanel'
+                includeGroup 'com.github.promeg'
+                includeGroup 'com.contrarywind'
+                includeGroup 'com.github.LuckSiege.PictureSelector'
+                includeGroup 'com.jaeger.statusbarutil'
+                includeGroup 'com.github.chrisbanes.photoview'
             }
         }
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
+    tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
+tasks.register('clean', Delete) { delete rootProject.layout.buildDirectory }
